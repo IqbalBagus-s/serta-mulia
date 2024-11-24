@@ -1,4 +1,5 @@
 require('dotenv').config();
+ 
 const Hapi = require('@hapi/hapi');
 const routes = require('../server/routes');
 const loadModel = require('../services/loadModel');
@@ -27,8 +28,9 @@ const InputError = require('../exceptions/InputError');
             const newResponse = h.response({
                 status: 'fail',
                 message: `${response.message} Silakan gunakan foto lain.`
-            })
-            newResponse.code(response.statusCode)
+            });
+            // Validasi dan pastikan status code adalah integer
+            newResponse.code(Number.isInteger(response.statusCode) ? response.statusCode : 400); 
             return newResponse;
         }
  
@@ -36,8 +38,9 @@ const InputError = require('../exceptions/InputError');
             const newResponse = h.response({
                 status: 'fail',
                 message: response.message
-            })
-            newResponse.code(response.output.statusCode)
+            });
+            // Validasi dan pastikan status code adalah integer
+            newResponse.code(Number.isInteger(response.statusCode) ? response.statusCode : 500);
             return newResponse;
         }
  
